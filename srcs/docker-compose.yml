@@ -1,0 +1,9 @@
+# version: '3.14'
+services:
+  mariadb:
+    build: ./requirements/mariadb/
+    # container name to name a container oviously
+    container_name: inception_mariadb
+    # just to name the image
+    image: mariadb:inception
+    pull_policy: never
