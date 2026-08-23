@@ -24,3 +24,6 @@ ssl/tls:
 3. [certificate from scratch](https://youtu.be/kAaIYRJoJkc?si=1MxIXaXMjvvCMlnR)
 4. [tls vs ssl](https://aws.amazon.com/compare/the-difference-between-ssl-and-tls/)
 5. [what is a database?](https://aws.amazon.com/what-is/database/)
+
+nginx:
+[configure https servers](https://nginx.org/en/docs/http/configuring_https_servers.html)
