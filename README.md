@@ -27,3 +27,7 @@ ssl/tls:
 
 nginx:
 [configure https servers](https://nginx.org/en/docs/http/configuring_https_servers.html)
+
+apache2/adminer:
+[Apache Basics Tutorial](https://www.youtube.com/watch?v=1CDxpAzvLKY&t=303s)
+[adminer]()

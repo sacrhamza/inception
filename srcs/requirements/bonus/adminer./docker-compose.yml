@@ -1,0 +1,16 @@
+services:
+  adminer:
+    build:
+      dockerfile: adminer.dockerfile
+      context: .
+    pull_policy: never
+    image: adminer:inception
+    container_name: adminer
+    networks:
+      - inception_network
+    ports:
+      - 8080:443
+
+networks:
+  inception_network:
+    name: something

@@ -1,16 +1,5 @@
 # version: '3.14'
 services:
-  mariadb:
-    build:
-      dockerfile: mariadb.dockerfile
-      context: ./requirements/mariadb/
-    image: mariadb:inception
-    # container name to name a container oviously
-    container_name: inception_mariadb
-    # just to name the image
-    pull_policy: never 
-    networks:
-      - inception_network
 
 
   nginx:
@@ -24,17 +13,58 @@ services:
       - 443:443
     networks:
         - inception_network
+    volumes:
+      - wordpress_volume:/var/www/wordpress/
 
   wordpress:
     build:
       dockerfile: wordpress.dockerfile
       context: ./requirements/wordpress/
     image: wordpress:inception
+    container_name: wordpress
     pull_policy: never
     networks:
         - inception_network
+    volumes:
+      - wordpress_volume:/var/www/wordpress/
+    depends_on:
+      mariadb:
+        condition: service_healthy
 
+  mariadb:
+    build:
+      dockerfile: mariadb.dockerfile
+      context: ./requirements/mariadb/
+    # container name to name a container oviously
+    container_name: inception_mariadb
+    # just to name the image
+    image: mariadb:inception
+    pull_policy: never 
+    networks:
+      - inception_network
+    # volumes:
+    #   - inception_volume:/database
+    healthcheck:
+      test: /bin/service_healthy.sh
+      interval: 0.25s
+      retries: 10
+      start_period: 1s
+      timeout: 5s
 
 networks:
   inception_network:
     name: something
+
+volumes:
+  wordpress_volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/hsacr/data/wordpress
+  database_volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/hsacr/data/database/

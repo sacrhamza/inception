@@ -1,0 +1,24 @@
+services:
+  some:
+     image: client:inception
+     pull_policy: never
+     command: mariadb -h mariadb --user=hamza --password=hamza
+     depends_on:
+       mariadb:
+         condition: service_healthy
+
+  mariadb:
+    build:
+      dockerfile: mariadb.dockerfile
+      context: ./requirements/mariadb/
+    # container name to name a container oviously
+    container_name: inception_mariadb
+    # just to name the image
+    image: mariadb:inception
+    pull_policy: never 
+    healthcheck:
+      test: /bin/service_healthy.sh
+      interval: 0.25s
+      retries: 10
+      start_period: 1s
+      timeout: 10s
