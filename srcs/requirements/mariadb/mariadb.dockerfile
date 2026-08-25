@@ -1,4 +1,4 @@
-FROM debian
+FROM debian:bookworm
 
 ARG INSTALL='apt install -y'
 

@@ -4,12 +4,18 @@
     this project is about lerning docker and setup basic infrastructore using docker container
     in a network.
 
+* diff between virtual machine and docker:
+* Secrets vs Environment Variables
+* Docker Network vs Host Network
+* Docker Volumes vs Bind Mounts
+
 ### Instructions:
 easily run:
 ```bash
 make up
 make down
 ```
+
 
 
 

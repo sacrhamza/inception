@@ -1,4 +1,4 @@
-FROM debian
+FROM debian:bookworm
 
 # [INSTALL DEPS]
 RUN apt update -y

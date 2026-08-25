@@ -1,4 +1,4 @@
-FROM debian
+FROM debian:bookworm
 
 RUN apt update -y
 RUN apt install adminer -y
