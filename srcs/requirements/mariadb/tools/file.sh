@@ -1,3 +1,0 @@
-DATABASE_NAME="mydatabase"
-MARIADB_USER="hamza"
-MARIADB_PASSWORD="hamza"

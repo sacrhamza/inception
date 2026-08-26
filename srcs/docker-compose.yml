@@ -8,15 +8,17 @@ services:
     image: nginx:inception
     container_name: inception_nginx
     pull_policy: never
-    ports:
-      - 443:443
     networks:
         - inception_network
     volumes:
       - wordpress_volume:/var/www/wordpress/
+    env_file: .env
     depends_on:
       wordpress:
-        condition: service_healthy
+        condition: service_started
+    restart: unless-stopped
+    ports:
+      - 443:443
 
   wordpress:
     build:
@@ -25,8 +27,13 @@ services:
     image: wordpress:inception
     container_name: inception_wordpress
     pull_policy: never
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    restart: unless-stopped
     networks:
-        - inception_network
+      - inception_network
+
     volumes:
       - wordpress_volume:/var/www/wordpress/
     # healthcheck:
@@ -35,44 +42,31 @@ services:
     #   retries:
     #   start_period:
     #   timeout: 
-    depends_on:
-      mariadb:
-        condition: service_healthy
+    env_file: .env
+    secrets:
+      - database_secrets
+      - wordpress_secrets
 
   mariadb:
     build:
       dockerfile: mariadb.dockerfile
       context: ./requirements/mariadb/
-    # container name to name a container oviously
     container_name: inception_mariadb
-    # just to name the image
     image: mariadb:inception
     pull_policy: never 
     networks:
       - inception_network
-    # volumes:
-    #   - inception_volume:/database
+    volumes:
+      - database_volume:/var/lib/mysql
+    secrets:
+      - database_secrets
+    restart: unless-stopped
     healthcheck:
-      test: /bin/service_healthy.sh
-      interval: 0.25s
-      retries: 10
+      test: /usr/local/bin/service_healthy.sh
+      interval: 1s
+      retries: 20
       start_period: 1s
-      timeout: 5s
-
-  adminer:
-    build:
-      dockerfile: adminer.dockerfile
-      context: ./requirements/bonus/adminer/
-    pull_policy: never
-    image: adminer:inception
-    container_name: inception_adminer
-    networks:
-      - inception_network
-    ports:
-      - 9000:443
-    depends_on:
-      mariadb:
-        condition: service_healthy
+      timeout: 100s
 
 networks:
   inception_network:
@@ -91,3 +85,9 @@ volumes:
       type: none
       o: bind
       device: /home/hsacr/data/database/
+
+secrets:
+  database_secrets:
+    file: ../secrets/database_secrets
+  wordpress_secrets:
+    file: ../secrets/wordpress_secrets

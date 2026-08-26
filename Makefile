@@ -3,20 +3,19 @@ VOLUMES_DIR = /home/hsacr/data/
 mariadb:
 	docker compose -f ./srcs/docker-compose.yml up --build  mariadb
 
-
 wordpress:
 	docker compose -f ./srcs/docker-compose.yml up --build  wordpress 
 
 up:
-	docker compose -f ./srcs/docker-compose.yml up --build  nginx
+	sudo mkdir -p ${VOLUMES_DIR}/wordpress
+	sudo mkdir -p ${VOLUMES_DIR}/database
+	docker compose -f ./srcs/docker-compose.yml up --build
 
 down:
-	docker compose down -f ./srcs/docker-compose.yml
+	docker compose -f ./srcs/docker-compose.yml down
 
+clean: down
 
-clean:
+flcean: clean
 
-flcean:
-
-
-
+re:
