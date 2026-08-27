@@ -70,6 +70,10 @@ to stop it run:
 ```bash
 make down
 ```
+to stop and remove containers and get rid of docker network run:
+```
+make clean
+```
 to remove anything related to the project:
 ```
 # NOTE: even data inside /home/hsacr/data/ will be removed + inception images
