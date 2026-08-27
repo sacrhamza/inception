@@ -1,5 +1,7 @@
 VOLUMES_DIR = /home/hsacr/data/
 
+all: up
+
 mariadb:
 	docker compose -f ./srcs/docker-compose.yml up --build  mariadb
 
@@ -16,6 +18,8 @@ down:
 
 clean: down
 
-flcean: clean
+fclean: clean
+	docker rmi $(docker image ls --filter "reference=*:inception" -q) || true
+	sudo rm -rf ${VOLUMES_DIR}/*
 
-re:
+re: fclean up

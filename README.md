@@ -1,8 +1,7 @@
 ### This project has been created as part of the 42 curriculum by <p color="#00ff00">hsacr</p>
 
 #### Description:
-    this project is about lerning docker and setup basic infrastructore using docker container
-    in a network.
+    this project is about lerning docker and setup basic infrastructore using docker containers / docker compose in a network.
 
 * diff between virtual machine and docker:
 - Docker and virtual machines (VMs) are two technologies used in application deployment. In the software development lifecycle, deployment prepares the application code to run for your end users. Docker is an open-source platform that developers use to package software into standardized units called containers. The container has both the application code and its environment, including libraries, system tools, and runtime. Using Docker, you can deploy and scale applications on any machine and ensure your code runs consistently. In contrast, a virtual machine is a digital copy of a physical machine. You can have multiple virtual machines with their own individual operating systems running on the same host operating system. Developers configure the virtual machine to create the application’s environment. It’s also possible to run Docker containers on virtual machines.
@@ -21,35 +20,97 @@ Docker is the name of the open-source container platform that’s owned and oper
 A virtual machine itself is the usable part for the end user. The technology isn’t associated with a specific brand. You can deploy VMs in on-premises data centers or access them via APIs as a managed cloud service.
 
 * Secrets vs Environment Variables
+
+| Environment Variables                                                          | Secrets                                                                            |
+| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| Used mainly for configuration                                                  | Used mainly for sensitive information                                              |
+| Values are commonly provided through `.env` or `environment`                   | Values are stored separately and mounted into the container                        |
+| Can contain non-sensitive configuration such as `DOMAIN_NAME`                  | Should contain passwords, credentials, and other confidential data                 |
+| Values can be visible through container configuration such as `docker inspect` | Designed to avoid putting sensitive values directly into the Compose configuration |
+| Example: `DOMAIN_NAME=example.com`                                             | Example: `MARIADB_PASSWORD=...`                                                    |
+
+
 * Docker Network vs Host Network
+| Docker Network                                                      | Host Network                                                        |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Uses a Docker-managed network                                       | Uses the host machine's network directly                            |
+| Containers have their own network interfaces/IPs                    | Container shares the host's network stack                           |
+| Provides network isolation between containers and the host          | Provides little network isolation                                   |
+| Containers can communicate using service names, e.g. `mariadb:3306` | Docker service-name DNS is not available in the usual way           |
+| Ports can be mapped from container to host                          | No port mapping is required                                         |
+| Example: `ports: - "443:443"`                                       | Container directly uses the host's ports                            |
+| Multiple containers can use the same internal port                  | Port conflicts with host applications are possible                  |
+| Better suited for containerized applications                        | Useful for applications requiring direct access to the host network |
+| Recommended for the Inception project                               | Not recommended for the Inception project                           |
+| Example: `nginx → wordpress → mariadb` through a Docker network     | Example: NGINX container directly using the host's network          |
+
+
 * Docker Volumes vs Bind Mounts
+| Docker Volume                                                                                 | Bind Mount                                                                 |
+| --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Managed by Docker                                                                             | Managed directly by the user                                               |
+| Docker decides where the volume is stored by default                                          | User explicitly chooses the host directory                                 |
+| Does not normally require a specific host path                                                | Requires a specific host path                                              |
+| Example: `my_volume:/var/lib/mysql`                                                           | Example: `/home/hsacr/data/database:/var/lib/mysql`                        |
+| Stored in Docker's storage area by default                                                    | Stored exactly at the specified host path                                  |
+| Easier to manage with Docker                                                                  | Gives more control over the location                                       |
+| Can be created with `docker volume create`                                                    | The host directory can be created directly with normal filesystem commands |
+| Good for persistent container data                                                            | Good when you need the data in a specific host directory                   |
+| Docker manages the volume lifecycle                                                           | User manages the host directory                                            |
+| Can be inspected with `docker volume inspect`                                                 | Can be inspected directly with normal filesystem commands                  |
+| Inception can use a volume configured with `driver_opts` to bind to a required host directory | Directly maps the required `/home/<login>/data/...` directory              |
+
 
 ### Instructions:
-easily run:
+to start the project easily run:
 ```bash
 make up
+```
+to stop it run:
+```bash
 make down
+```
+to remove anything related to the project:
+```
+# NOTE: even data inside /home/hsacr/data/ will be removed + inception images
+make fclean
 ```
 
 
+### Resources:
+docker/docker compose:
+[dockerfile](https://docs.docker.com/reference/dockerfile/)
+[docker crush course](https://youtu.be/eGz9DS-aIeY?si=m82cL1jAm59g2MPC)
+[learn docker!!](https://youtu.be/eGz9DS-aIeY?si=dDzrNnAV5ZfsWcsj)
+[the only docker toturial you need to get started](https://youtu.be/DQdB7wFEygo?si=wCWmYU_NdO_m9rOR)
+[docker compose](https://youtu.be/SXwC9fSwct8?si=sgfW4q1g7BVDhk7C)
+[docker compose toturial](https://youtu.be/SXwC9fSwct8?si=sgfW4q1g7BVDhk7C)
+[official docker compose doc](https://docs.docker.com/compose/)
 
-
-# Inception
-42 Inception
-
-Resources:
 ssl/tls:
-0. [HTTPS, SSL, TLS & Certificate Authority Explained ](https://youtu.be/EnY6fSng3Ew?si=rQvRxGWTcMqd3OEt)
-1. [what is ssl certificate](https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/)
-2. [tls explained 7min](https://www.youtube.com/watch?v=67Kfsmy_frM)
-3. [certificate from scratch](https://youtu.be/kAaIYRJoJkc?si=1MxIXaXMjvvCMlnR)
-4. [tls vs ssl](https://aws.amazon.com/compare/the-difference-between-ssl-and-tls/)
-5. [what is a database?](https://aws.amazon.com/what-is/database/)
+[HTTPS, SSL, TLS & Certificate Authority Explained ](https://youtu.be/EnY6fSng3Ew?si=rQvRxGWTcMqd3OEt)
+[what is ssl certificate](https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/)
+[tls explained 7min](https://www.youtube.com/watch?v=67Kfsmy_frM)
+[certificate from scratch](https://youtu.be/kAaIYRJoJkc?si=1MxIXaXMjvvCMlnR)
+[tls vs ssl](https://aws.amazon.com/compare/the-difference-between-ssl-and-tls/)
 
 nginx:
 [configure https servers](https://nginx.org/en/docs/http/configuring_https_servers.html)
+[how to setup ssl with nginx?](https://youtu.be/X3Pr5VATOyA?si=nIXWh3FrNkB9kD0t)
+[nginx https servers](https://youtu.be/MVuJ5h2YQoQ?si=McinaS_hE2QosTx4)
 
-apache2/adminer:
-[Apache Basics Tutorial](https://www.youtube.com/watch?v=1CDxpAzvLKY&t=303s)
-[adminer]()
-[docker vs virtual machine](https://aws.amazon.com/compare/the-difference-between-docker-vm/)
+sql/mariadb/databases:
+[SQL tutorial](https://www.w3schools.com/sql/)
+[install mariadb](https://mariadb.com/docs/server/mariadb-quickstart-guides/installing-mariadb-server-guide)
+[learn mariadb](https://youtu.be/-b3trv4e5TE?si=jEmZy9J1oiuf-2di)
+[what is a database? ibm](https://www.ibm.com/think/topics/database)
+[what is database? aws](https://aws.amazon.com/what-is/database/)
+
+wordpress/php-fmp:
+[php-fpm](https://youtu.be/vohsuhwWvpw?si=OSP2x5UEQZyMkEmS)
+[php and docker](https://youtu.be/njcUv0e8egM?si=d_zroSVXpXAJnrHv)
+[wordpress cli](https://youtu.be/kSwcJmNFoac?si=re1jGGYDEk5JXwUp)
+[official worpdress site](https://wordpress.com/)
+[setup wordpress](https://developer.wordpress.org/advanced-administration/before-install/howto-install/)
+[wp cli](https://youtu.be/L13YJ_VVbac?si=BFqwq7rog7wtHvAo)
+
