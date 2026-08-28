@@ -3,7 +3,7 @@
 #### SETUP ENVIRONMENT FROM SCRATCH
 
 * prerequisites:
-at first you need docker engine and you can install it with:
+at first you need docker engine with docker compose and you can install it with:
 [debain](https://docs.docker.com/engine/install/debian/)
 [redhat](https://docs.docker.com/engine/install/rhel/)
 
@@ -39,11 +39,11 @@ and /home/login/data/wordpress => /home/hsacr/data/wordpress
 #### BUILD AND LAUNCH THE PROJECT:
 - to start the prject you can run:
 ```bash
-make up
+make up # or make
 ```
 - and to stop it you can run:
 ```bash
-make down
+make down # or make clean
 ```
 - to clean everything you can run:
 ```bash
@@ -144,4 +144,4 @@ WordPress:
 ```
 
 Therefore, removing and recreating the containers does not remove the
-project data, because the data is stored outside the containers on the host.
+project data, because the data is stored outside the containers on the host, unless you run make fclean.

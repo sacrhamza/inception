@@ -3,6 +3,54 @@
 #### Description:
     this project is about lerning docker and setup basic infrastructore using docker containers / docker compose in a network.
 
+project structure: 
+```bash
+tree *
+├──  DEV_DOC.md
+├──  dont_push_envs
+├──  Makefile
+├──  README.md
+├──  secrets
+│  ├──  database_secrets
+│  └──  wordpress_secrets
+├──  srcs
+│  ├──  docker-compose.yml
+│  ├──  Dockerfiles
+│  │  └──  nginx
+│  └──  requirements
+│     ├──  mariadb
+│     │  ├──  mariadb.dockerfile
+│     │  └──  tools
+│     │     ├──  entrypoint.sh
+│     │     └──  service_healthy.sh
+│     ├──  nginx
+│     │  ├──  configs
+│     │  │  └──  inception.conf
+│     │  ├──  nginx.dockerfile
+│     │  └──  tools
+│     │     └──  entrypoint.sh
+│     └──  wordpress
+│        ├──  tools
+│        │  ├──  entrypoint.sh
+│        │  └──  service_healthy.sh
+│        └──  wordpress.dockerfile
+└──  USER_DOC.md
+```
+
+int this project i have a makefile that setup everything:
+```bash
+make
+```
+
+Docker
+
+This project uses Docker to containerize each service and isolate the infrastructure into separate containers. Docker Compose is used to build and manage the containers, networks, and volumes. NGINX acts as the only entry point to the infrastructure, while WordPress/PHP-FPM and MariaDB run in separate containers. Docker volumes are used to persist WordPress and database data.
+
+i have a docker compose in srcs that spin 3 containers:
+=> nginx with tlsv2 or tlsv3 listening port 443 from the host;
+=> wordpress/php-fpm; php fast cgi getting cgi request from nginx and return data; listen on port 9000; and also wordpress files, configured, it has two users one administrator and another normal user;
+=> mariadb as a database connected to wordpress to store data via a user on port 3306; and puting data in /home/hsacr/data/database
+
 * diff between virtual machine and docker:
 - Docker and virtual machines (VMs) are two technologies used in application deployment. In the software development lifecycle, deployment prepares the application code to run for your end users. Docker is an open-source platform that developers use to package software into standardized units called containers. The container has both the application code and its environment, including libraries, system tools, and runtime. Using Docker, you can deploy and scale applications on any machine and ensure your code runs consistently. In contrast, a virtual machine is a digital copy of a physical machine. You can have multiple virtual machines with their own individual operating systems running on the same host operating system. Developers configure the virtual machine to create the application’s environment. It’s also possible to run Docker containers on virtual machines.
 
