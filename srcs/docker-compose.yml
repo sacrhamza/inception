@@ -15,7 +15,7 @@ services:
     env_file: .env
     depends_on:
       wordpress:
-        condition: service_started
+        condition: service_healthy
     restart: unless-stopped
     ports:
       - 443:443
@@ -36,12 +36,12 @@ services:
 
     volumes:
       - wordpress_volume:/var/www/wordpress/
-    # healthcheck:
-    #   test: 
-    #   interval:
-    #   retries:
-    #   start_period:
-    #   timeout: 
+    healthcheck:
+      test: /usr/local/bin/service_healthy.sh
+      interval: 1s
+      retries: 5
+      start_period: 2s
+      timeout: 20s
     env_file: .env
     secrets:
       - database_secrets
@@ -64,9 +64,9 @@ services:
     healthcheck:
       test: /usr/local/bin/service_healthy.sh
       interval: 1s
-      retries: 20
+      retries: 5
       start_period: 1s
-      timeout: 100s
+      timeout: 10s
 
 networks:
   inception_network:

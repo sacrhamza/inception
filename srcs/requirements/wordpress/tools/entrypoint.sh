@@ -31,9 +31,8 @@ do
 done
 
 
-if ! wp --allow-root core is-installed --path=/var/www/wordpress
+if ! wp --allow-root  --path=/var/www/wordpress user exists "${WP_ADMIN_USER}" 1> /dev/null 2> /dev/null
 then
-  wp --allow-root core download --path=/var/www/wordpress
 
   # config for database
   wp --allow-root config create \
@@ -53,10 +52,10 @@ then
     --admin_email="$WP_ADMIN_EMAIL"
 
 
-  wp user create normal normal@example.com \
+  wp user create normaluser normal@example.com \
     --path=/var/www/wordpress \
     --role=subscriber \
-    --user_pass='normaluser' \
+    --user_pass='normal_user_password' \
     --allow-root
 fi
 

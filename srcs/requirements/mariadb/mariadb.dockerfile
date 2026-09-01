@@ -7,6 +7,7 @@ RUN $INSTALL  mariadb-server mariadb-client galera-4
 
 # [REMOVE ME] ESSETIONAL 
 RUN  $INSTALL vim curl file wget
+
 RUN sed -i '/^bind/c\bind = 0.0.0.0'  /etc/mysql/mariadb.conf.d/50-server.cnf
 
 COPY ./tools/entrypoint.sh /usr/local/bin/

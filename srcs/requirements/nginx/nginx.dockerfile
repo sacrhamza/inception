@@ -4,7 +4,7 @@ RUN apt update -y
 RUN apt -y install nginx openssl
 
 # this just for testing puposes delete that line in production
-RUN apt -y install vim bash curl wget curl  file
+# RUN apt -y install vim bash curl wget curl  file
 
 WORKDIR /etc/nginx
 
