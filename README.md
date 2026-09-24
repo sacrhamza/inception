@@ -128,6 +128,9 @@ to remove anything related to the project:
 make fclean
 ```
 
+### THE USE OF AI:
+ai used to get good sources for services(docs, youtube vides and so on);
+
 
 ### Resources:
 docker/docker compose:

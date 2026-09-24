@@ -10,7 +10,7 @@ WORDPRESS_SECRETS="${SECRET_DIR}/wordpress_secrets"
 
 if [[ ! -f ${DATABASE_SECRETS} ]] || [[ ! -f ${WORDPRESS_SECRETS} ]]
 then
-  echo wordpress
+  echo "NO SECRET FILES!!"
   exit 1
 fi
 
@@ -52,6 +52,7 @@ then
     --admin_email="$WP_ADMIN_EMAIL"
 
 
+  # adding a normal user role: subscriber
   wp user create normaluser normal@example.com \
     --path=/var/www/wordpress \
     --role=subscriber \

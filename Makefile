@@ -9,13 +9,13 @@ wordpress:
 	docker compose -f ./srcs/docker-compose.yml up --build  wordpress 
 
 up:
-	sudo mkdir -p ${VOLUMES_DIR}/wordpress
-	sudo mkdir -p ${VOLUMES_DIR}/database
+	mkdir -p ${VOLUMES_DIR}/wordpress
+	mkdir -p ${VOLUMES_DIR}/database
 	docker compose -f ./srcs/docker-compose.yml up --build
 
 detach:
-	sudo mkdir -p ${VOLUMES_DIR}/wordpress
-	sudo mkdir -p ${VOLUMES_DIR}/database
+	mkdir -p ${VOLUMES_DIR}/wordpress
+	mkdir -p ${VOLUMES_DIR}/database
 	docker compose -f ./srcs/docker-compose.yml up --build -d
 
 
@@ -23,10 +23,11 @@ down:
 	docker compose -f ./srcs/docker-compose.yml down
 
 clean: down
+	images=$$(docker image ls --filter "reference=*:inception" -q); docker rmi $$images
 
 fclean: clean
-	docker rmi $(docker image ls --filter "reference=*:inception" -q) || true
 	sudo rm -rf ${VOLUMES_DIR}/*
+	docker volume rm srcs_wordpress_volume srcs_database_volume
 
 re: fclean up
 
